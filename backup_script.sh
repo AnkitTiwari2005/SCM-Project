@@ -10,8 +10,14 @@ mkdir -p "$BACKUP_DIR"
 
 cp -r "$SOURCE_DIR"/* "$BACKUP_DIR" 2>> "$LOG_FILE"
 
-if [ $? -eq 0 ]; then
+echo "Backup process started at $(date)" >> "$LOG_FILE"
+
+if cp -r "$SOURCE_DIR"/* "$BACKUP_DIR" 2>> "$LOG_FILE"; then
     echo "Backup successful: $(date)" >> "$LOG_FILE"
 else
     echo "Backup failed: $(date)" >> "$LOG_FILE"
+    echo "Error details: $(tail -5 $LOG_FILE)" | mail -s "Backup Failed" user@example.com
 fi
+
+echo "Backup process completed at $(date)" >> "$LOG_FILE"
+
